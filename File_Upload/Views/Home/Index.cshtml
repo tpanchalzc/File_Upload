@@ -1,0 +1,10 @@
+﻿@{
+    ViewBag.Title = "Index";
+}
+<h1>File Upload</h1>
+@using (Ajax.BeginForm(new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "result" }))
+{
+    <input type="file" />
+    <input type="submit" />
+}
+<div id="result"/>
