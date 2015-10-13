@@ -1,0 +1,194 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="Upload_testModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="My_File">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="FileName" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="TotalColumns" Type="varbinary(max)" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Project_defect">
+          <Key>
+            <PropertyRef Name="PID" />
+          </Key>
+          <Property Name="PID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Project" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="Key" Type="nvarchar" MaxLength="10" />
+          <Property Name="Summary" Type="varchar" MaxLength="100" />
+          <Property Name="Status" Type="varchar" MaxLength="20" />
+          <Property Name="Priority" Type="varchar" MaxLength="20" />
+          <Property Name="Resolution" Type="varchar" MaxLength="20" />
+          <Property Name="Assignee" Type="varchar" MaxLength="30" />
+          <Property Name="Reporter" Type="varchar" MaxLength="20" />
+          <Property Name="Creator" Type="varchar" MaxLength="20" />
+          <Property Name="Created" Type="date" />
+          <Property Name="Updated" Type="date" />
+          <Property Name="Resolved" Type="date" />
+          <Property Name="Affects_Vesrsion" Type="nchar" MaxLength="2" />
+          <Property Name="Fix_Version" Type="nchar" MaxLength="2" />
+          <Property Name="Components" Type="varchar" MaxLength="20" />
+          <Property Name="Time_spent" Type="nchar" MaxLength="20" />
+          <Property Name="Test_Cycle" Type="varchar" MaxLength="30" />
+          <Property Name="Reopens" Type="nchar" MaxLength="2" />
+          <Property Name="Root_Cause" Type="varchar" MaxLength="20" />
+          <Property Name="QA_Team" Type="varchar" MaxLength="20" />
+          <Property Name="Dev_Team" Type="varchar" MaxLength="20" />
+          <Property Name="Id" Type="int" Nullable="false" />
+        </EntityType>
+        <Association Name="FK__Project_defe__Id__239E4DCF">
+          <End Role="My_File" Type="Self.My_File" Multiplicity="1" />
+          <End Role="Project_defect" Type="Self.Project_defect" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="My_File">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Project_defect">
+              <PropertyRef Name="Id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="Upload_testModelStoreContainer">
+          <EntitySet Name="My_File" EntityType="Self.My_File" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Project_defect" EntityType="Self.Project_defect" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK__Project_defe__Id__239E4DCF" Association="Self.FK__Project_defe__Id__239E4DCF">
+            <End Role="My_File" EntitySet="My_File" />
+            <End Role="Project_defect" EntitySet="Project_defect" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="Upload_testModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="My_File">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="FileName" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="TotalColumns" Type="Binary" MaxLength="Max" FixedLength="false" Nullable="false" />
+          <NavigationProperty Name="Project_defect" Relationship="Self.FK__Project_defe__Id__239E4DCF" FromRole="My_File" ToRole="Project_defect" />
+        </EntityType>
+        <EntityType Name="Project_defect">
+          <Key>
+            <PropertyRef Name="PID" />
+          </Key>
+          <Property Name="PID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Project" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Key" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="Summary" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="Status" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="Priority" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="Resolution" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="Assignee" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="Reporter" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="Creator" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="Created" Type="DateTime" Precision="0" />
+          <Property Name="Updated" Type="DateTime" Precision="0" />
+          <Property Name="Resolved" Type="DateTime" Precision="0" />
+          <Property Name="Affects_Vesrsion" Type="String" MaxLength="2" FixedLength="true" Unicode="true" />
+          <Property Name="Fix_Version" Type="String" MaxLength="2" FixedLength="true" Unicode="true" />
+          <Property Name="Components" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="Time_spent" Type="String" MaxLength="20" FixedLength="true" Unicode="true" />
+          <Property Name="Test_Cycle" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="Reopens" Type="String" MaxLength="2" FixedLength="true" Unicode="true" />
+          <Property Name="Root_Cause" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="QA_Team" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="Dev_Team" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="Id" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="My_File" Relationship="Self.FK__Project_defe__Id__239E4DCF" FromRole="Project_defect" ToRole="My_File" />
+        </EntityType>
+        <Association Name="FK__Project_defe__Id__239E4DCF">
+          <End Role="My_File" Type="Self.My_File" Multiplicity="1" />
+          <End Role="Project_defect" Type="Self.Project_defect" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="My_File">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Project_defect">
+              <PropertyRef Name="Id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="Upload_testEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="My_File" EntityType="Self.My_File" />
+          <EntitySet Name="Project_defect" EntityType="Self.Project_defect" />
+          <AssociationSet Name="FK__Project_defe__Id__239E4DCF" Association="Self.FK__Project_defe__Id__239E4DCF">
+            <End Role="My_File" EntitySet="My_File" />
+            <End Role="Project_defect" EntitySet="Project_defect" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="Upload_testModelStoreContainer" CdmEntityContainer="Upload_testEntities">
+          <EntitySetMapping Name="My_File">
+            <EntityTypeMapping TypeName="Upload_testModel.My_File">
+              <MappingFragment StoreEntitySet="My_File">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="FileName" ColumnName="FileName" />
+                <ScalarProperty Name="TotalColumns" ColumnName="TotalColumns" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Project_defect">
+            <EntityTypeMapping TypeName="Upload_testModel.Project_defect">
+              <MappingFragment StoreEntitySet="Project_defect">
+                <ScalarProperty Name="PID" ColumnName="PID" />
+                <ScalarProperty Name="Project" ColumnName="Project" />
+                <ScalarProperty Name="Key" ColumnName="Key" />
+                <ScalarProperty Name="Summary" ColumnName="Summary" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="Priority" ColumnName="Priority" />
+                <ScalarProperty Name="Resolution" ColumnName="Resolution" />
+                <ScalarProperty Name="Assignee" ColumnName="Assignee" />
+                <ScalarProperty Name="Reporter" ColumnName="Reporter" />
+                <ScalarProperty Name="Creator" ColumnName="Creator" />
+                <ScalarProperty Name="Created" ColumnName="Created" />
+                <ScalarProperty Name="Updated" ColumnName="Updated" />
+                <ScalarProperty Name="Resolved" ColumnName="Resolved" />
+                <ScalarProperty Name="Affects_Vesrsion" ColumnName="Affects_Vesrsion" />
+                <ScalarProperty Name="Fix_Version" ColumnName="Fix_Version" />
+                <ScalarProperty Name="Components" ColumnName="Components" />
+                <ScalarProperty Name="Time_spent" ColumnName="Time_spent" />
+                <ScalarProperty Name="Test_Cycle" ColumnName="Test_Cycle" />
+                <ScalarProperty Name="Reopens" ColumnName="Reopens" />
+                <ScalarProperty Name="Root_Cause" ColumnName="Root_Cause" />
+                <ScalarProperty Name="QA_Team" ColumnName="QA_Team" />
+                <ScalarProperty Name="Dev_Team" ColumnName="Dev_Team" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
