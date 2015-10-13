@@ -1,11 +1,53 @@
 ﻿@{
     ViewBag.Title = "Index";
 }
-<script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
+<script>
+    function SubmitButtonOnclick() {
+        var formData = new FormData();
+        var file1 = document.getElementById("myFile").files[0];
+        formData.append("myFile", file1);
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("Upload","Home")',
+            data: formData,
+            contentType: false,
+            processData: false,
+
+            xhr: function() {  // Custom XMLHttpRequest
+                var myXhr = $.ajaxSettings.xhr();
+                if(myXhr.upload){ // Check if upload property exists
+                    myXhr.upload.addEventListener('progress',progressHandlingFunction, false); // For handling the progress of the upload
+                }
+                return myXhr;
+            },
+            
+            success: function (response) {
+                console.log(response);
+                $('#myDiv').html(response);
+                $("#fileProgress").css("width", "0%").removeClass("active");
+            },
+            error: function (error) {
+                $('#myDiv').html(error);
+            }
+
+        });
+
+        function progressHandlingFunction(e) {
+            if (e.lengthComputable) {
+                var s = parseInt((e.loaded / e.total) * 100) + "%";
+                $("#fileProgress").css("width", s);
+            }
+        }
+        return false;
+    }
+</script>
 <h1>File Upload</h1>
 @using (Html.BeginForm("Upload", "Home", FormMethod.Post, new { enctype = "multipart/form-data" }))
 {
-    <input type="file" name="myFile" />
-    <input type="submit" />
+    <input type="file" name="myFile" id="myFile" />
+    <input type="submit" onclick="return SubmitButtonOnclick()" id="btnSubmit" />
 }
-<div>@ViewBag.Result</div>
+<div class="progress">
+    <div class="progress-bar progress-bar-striped active" role="progressbar" id="fileProgress" aria-valuemin="0" aria-valuemax="100" ></div>
+</div>
+<div id="myDiv" />
