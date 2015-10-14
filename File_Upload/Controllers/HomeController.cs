@@ -47,7 +47,7 @@ namespace File_Upload.Controllers
                     for (int i = 4; i < rowCount; i++)
                     {
                         List<string> row = new List<string>();
-                        for (int j = 1; j < colCount; j++)
+                        for (int j = 1; j <= colCount; j++)
                         {
                             string tmp = "" + (ws.Cells[i, j] as Microsoft.Office.Interop.Excel.Range).Value;
                             row.Add(tmp);
