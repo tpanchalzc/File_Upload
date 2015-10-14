@@ -30,11 +30,16 @@ namespace File_Upload.Controllers
                 if (myFile != null && myFile.ContentLength > 0)
                 {
                     string fileName = Path.GetFileName(myFile.FileName);
-                    string path = Path.Combine(Server.MapPath("~/App_Data/"), fileName);
+                    string path = Path.Combine(Server.MapPath("~/ExcelFile/"), fileName);
+                  
                     myFile.SaveAs(path);
 
                     xlApp = new Application();
                     book = xlApp.Workbooks.Open(path);
+
+                   
+                    if (book.FileFormat == XlFileFormat.xlCurrentPlatformText)
+                        return Content("Please select Excel file...!");
 
                     string res = "Total worksheets are:" + book.Worksheets.Count;
 
@@ -56,10 +61,17 @@ namespace File_Upload.Controllers
                     }
                     Marshal.ReleaseComObject(ws);
                     book.Close();
+                  
                     return PartialView("SheetDataView", data);
                     //return Content(res);
+                    
                 }
-                else return Content("failed");
+                
+                else
+                {
+                   
+                    return Content("failed");
+                }
             }
             catch (Exception ex)
             {
@@ -76,4 +88,5 @@ namespace File_Upload.Controllers
             }
         }
     }
+    
 }
