@@ -1,7 +1,15 @@
 ﻿<table class="table table-responsive">
     @{
         List<List<string>> myData = Model;
-        for (int i = 0; i < myData.Count; i++)
+
+        <tr>
+            @for (int j = 0; j < myData[0].Count; j++)
+            {
+                <th>@myData[0][j]</th>
+            }
+        </tr>
+
+        for (int i = 1; i < myData.Count; i++)
         {
             <tr>
                 @for (int j = 0; j < myData[i].Count; j++)
