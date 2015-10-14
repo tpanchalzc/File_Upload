@@ -1,10 +1,13 @@
-﻿using System;
+﻿using Microsoft.Office.Core;
+using Microsoft.Office.Interop.Excel;
+using System;
 using System.Collections.Generic;
+using System.Data.OleDb;
+using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Web;
 using System.Web.Mvc;
-using File_Upload.Models;
-using System.Web.UI.WebControls;
 
 namespace File_Upload.Controllers
 {
@@ -15,54 +18,57 @@ namespace File_Upload.Controllers
         {
             return View();
         }
-        public ActionResult FileUpload()
-        {
-            return View();
-        }
 
-        public ActionResult FileUpload(HttpPostedFileBase fl)
+        [HttpPost]
+        public ActionResult Upload(HttpPostedFileBase myFile)
         {
-          
-            if (fl.ContentLength > 0)
+            Application xlApp = null;
+            Workbook book = null;
+            try
             {
-                string fileExt = System.IO.Path.GetExtension(Request.Files["fileUpload"].FileName);
-
-                if(fileExt=="xls")
+                //myFile = Request.Files[0];
+                if (myFile != null && myFile.ContentLength > 0)
                 {
-                    string fileLocation =string.Format("{0}/{1}",Server.MapPath("~/ExcelFile"),Request.Files["FileUpload"].FileName);
-                    Request.Files["FileUpload"].SaveAs("~/ExcelFile");
-                   var excelConnectionString = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" + fileLocation + ";Extended Properties=\"Excel 12.0;HDR=Yes;IMEX=2\"";
-                    //connection String for xls file format.
-                    if (fileExt== ".xls")
-                    {
-                        excelConnectionString = "Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + fileLocation + ";Extended Properties=\"Excel 8.0;HDR=Yes;IMEX=2\"";
-                    }
-                    //connection String for xlsx file format.
-                    else if (fileExt == ".xlsx")
-                    {
+                    string fileName = Path.GetFileName(myFile.FileName);
+                    string path = Path.Combine(Server.MapPath("~/App_Data/"), fileName);
+                    myFile.SaveAs(path);
 
-                        excelConnectionString = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" + fileLocation + ";Extended Properties=\"Excel 12.0;HDR=Yes;IMEX=2\"";
-                    }
+                    xlApp = new Application();
+                    book = xlApp.Workbooks.Open(path);
 
+                    string res = "Total worksheets are:" + book.Worksheets.Count;
+
+                    List<List<string>> data = new List<List<string>>();
+
+                    Worksheet ws = book.Worksheets[1];
+                    for (int i = 5; i < 50; i++)
+                    {
+                        List<string> row = new List<string>();
+                        for (int j = 5; j < 50; j++)
+                        {
+                            string tmp = ""+(ws.Cells[i, j] as Microsoft.Office.Interop.Excel.Range).Value;
+                            row.Add(tmp);
+                        }
+                        data.Add(row);
+                    }
+                    Marshal.ReleaseComObject(ws);
+                    book.Close();
+                    return PartialView("SheetDataView", data);
+                    //return Content(res);
                 }
-                else
-                { 
-                    ViewBag.Message = "sorry, Please select Excel File";
-                    ViewBag.Bool = false;
-                }
-                ViewBag.Message = "Your File Has been uploaded";
-                ViewBag.Bool = true;
+                else return Content("failed");
             }
-            else 
+            catch (Exception ex)
             {
-                ViewBag.Message = "sorry, File Has not been uploaded";
-                ViewBag.Bool = false;
+                return Content(ex.ToString());
             }
-            return View();
+            finally
+            {
+                Marshal.ReleaseComObject(book);
+                Marshal.ReleaseComObject(xlApp);
+                book = null;
+                xlApp = null;
+            }
         }
-
-
     }
-
-
 }

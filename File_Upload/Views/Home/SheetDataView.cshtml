@@ -1,0 +1,14 @@
+﻿<table class="table table-responsive">
+    @{
+        List<List<string>> myData = Model;
+        for (int i = 0; i < myData.Count; i++)
+        {
+            <tr>
+                @for (int j = 0; j < myData[i].Count; j++)
+                {
+                    <td>@myData[i][j]</td>
+                }
+            </tr>
+        }
+    }
+</table>
