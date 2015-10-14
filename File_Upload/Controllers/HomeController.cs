@@ -41,12 +41,15 @@ namespace File_Upload.Controllers
                     List<List<string>> data = new List<List<string>>();
 
                     Worksheet ws = book.Worksheets[1];
-                    for (int i = 5; i < 50; i++)
+                    int rowCount = ws.Rows.CurrentRegion.EntireRow.Count;
+                    int colCount = ws.Columns.CurrentRegion.EntireColumn.Count;
+
+                    for (int i = 4; i < rowCount; i++)
                     {
                         List<string> row = new List<string>();
-                        for (int j = 5; j < 50; j++)
+                        for (int j = 1; j < colCount; j++)
                         {
-                            string tmp = ""+(ws.Cells[i, j] as Microsoft.Office.Interop.Excel.Range).Value;
+                            string tmp = "" + (ws.Cells[i, j] as Microsoft.Office.Interop.Excel.Range).Value;
                             row.Add(tmp);
                         }
                         data.Add(row);
@@ -64,8 +67,10 @@ namespace File_Upload.Controllers
             }
             finally
             {
-                Marshal.ReleaseComObject(book);
-                Marshal.ReleaseComObject(xlApp);
+                if (book != null)
+                    Marshal.ReleaseComObject(book);
+                if (xlApp != null)
+                    Marshal.ReleaseComObject(xlApp);
                 book = null;
                 xlApp = null;
             }

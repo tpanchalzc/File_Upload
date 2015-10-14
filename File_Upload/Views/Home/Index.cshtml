@@ -1,6 +1,7 @@
 ﻿@{
     ViewBag.Title = "Index";
 }
+<link href="~/Content/Loading.css" rel="stylesheet" />
 <script>
     function SubmitButtonOnclick() {
         var formData = new FormData();
@@ -13,21 +14,27 @@
             contentType: false,
             processData: false,
 
-            xhr: function() {  // Custom XMLHttpRequest
+            beforeSend: function(){
+                $("#overlay").fadeIn();
+            },
+
+            xhr: function () {  // Custom XMLHttpRequest
                 var myXhr = $.ajaxSettings.xhr();
-                if(myXhr.upload){ // Check if upload property exists
-                    myXhr.upload.addEventListener('progress',progressHandlingFunction, false); // For handling the progress of the upload
+                if (myXhr.upload) { // Check if upload property exists
+                    myXhr.upload.addEventListener('progress', progressHandlingFunction, false); // For handling the progress of the upload
                 }
                 return myXhr;
             },
-            
+
             success: function (response) {
-                console.log(response);
                 $('#myDiv').html(response);
-                $("#fileProgress").css("width", "0%").removeClass("active");
+                $("#fileProgress").css("width", "0%").text("");
+                $("#overlay").fadeOut();
             },
             error: function (error) {
                 $('#myDiv').html(error);
+                $("#fileProgress").css("width", "0%").text("");
+                $("#overlay").hide();
             }
 
         });
@@ -35,7 +42,7 @@
         function progressHandlingFunction(e) {
             if (e.lengthComputable) {
                 var s = parseInt((e.loaded / e.total) * 100) + "%";
-                $("#fileProgress").css("width", s);
+                $("#fileProgress").css("width", s).text(s);
             }
         }
         return false;
@@ -48,6 +55,18 @@
     <input type="submit" onclick="return SubmitButtonOnclick()" id="btnSubmit" />
 }
 <div class="progress">
-    <div class="progress-bar progress-bar-striped active" role="progressbar" id="fileProgress" aria-valuemin="0" aria-valuemax="100" ></div>
+    <div class="progress-bar progress-bar-striped active" role="progressbar" id="fileProgress" aria-valuemin="0" aria-valuemax="100"></div>
 </div>
 <div id="myDiv" />
+<div>@ViewBag.Result</div>
+<div id="overlay" hidden>
+    <div id="load">
+        <div>G</div>
+        <div>N</div>
+        <div>I</div>
+        <div>D</div>
+        <div>A</div>
+        <div>O</div>
+        <div>L</div>
+    </div>
+</div>
